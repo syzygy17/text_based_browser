@@ -39,6 +39,7 @@ Twitter and Square Chief Executive Officer Jack Dorsey
 dir_name = sys.argv[1]
 os.makedirs(dir_name, exist_ok=True)
 tabs_list = []
+stack_back = []
 
 BLOOMBERG = 'bloomberg'
 NYTIMES = 'nytimes'
@@ -46,6 +47,7 @@ BLOOMBERG_SITE = 'bloomberg.com'
 NYTIMES_SITE = 'nytimes.com'
 EXIT = 'exit'
 TB_TABS = 'tb_tabs/'
+BACK = 'back'
 
 while True:
     url = input()
@@ -58,7 +60,14 @@ while True:
             elif url == NYTIMES:
                 print(nytimes_com)
         else:
-            print('Error: Incorrect URL')
+            if url == BACK and len(stack_back) > 0:
+                stack_back.pop()
+                if stack_back[-1] == BLOOMBERG:
+                    print(bloomberg_com)
+                elif stack_back[-1] == NYTIMES:
+                    print(nytimes_com)
+            else:
+                print('Error: Incorrect URL')
     else:
         if url == BLOOMBERG_SITE and url not in tabs_list:
             print(bloomberg_com)
@@ -66,9 +75,12 @@ while True:
             f.write(bloomberg_com)
             f.close()
             tabs_list.append(BLOOMBERG)
+            stack_back.append(BLOOMBERG)
         elif url == NYTIMES_SITE and url not in tabs_list:
             print(nytimes_com)
             f = open(TB_TABS + NYTIMES, 'w')
             f.write(nytimes_com)
             f.close()
             tabs_list.append(NYTIMES)
+            stack_back.append(NYTIMES)
+

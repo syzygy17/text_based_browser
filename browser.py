@@ -2,6 +2,7 @@ import os
 import sys
 import requests
 from bs4 import BeautifulSoup
+from colorama import Fore
 
 
 dir_name = sys.argv[1]
@@ -23,7 +24,7 @@ while True:
     else:
         r = requests.get(HTTPS + url)
         soup = BeautifulSoup(r.content, 'html.parser')
-        soup_text = soup.text
+        soup_text = soup.text + Fore.BLUE
         if url in tabs_list:
             print(soup_text)
         elif url == BACK and len(stack_back) > 0:
@@ -36,5 +37,3 @@ while True:
             f.close()
             tabs_list.append(url)
             stack_back.append(soup_text)
-
-

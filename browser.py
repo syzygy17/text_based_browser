@@ -1,6 +1,7 @@
 import os
 import sys
 import requests
+from bs4 import BeautifulSoup
 
 
 dir_name = sys.argv[1]
@@ -21,17 +22,19 @@ while True:
         print('Error: Incorrect URL')
     else:
         r = requests.get(HTTPS + url)
+        soup = BeautifulSoup(r.content, 'html.parser')
+        soup_text = soup.text
         if url in tabs_list:
-            print(r.text)
+            print(soup_text)
         elif url == BACK and len(stack_back) > 0:
             stack_back.pop()
             print(stack_back[-1])
         elif url not in tabs_list:
-            print(r.text)
+            print(soup_text)
             f = open(TB_TABS + url, 'w', encoding='UTF-8')
-            f.write(r.text)
+            f.write(soup_text)
             f.close()
             tabs_list.append(url)
-            stack_back.append(r.text)
+            stack_back.append(soup_text)
 
 
